@@ -1,0 +1,22 @@
+/* Puedes ajustar el ancho del navbar en pantallas grandes y pequeñas */
+@media (min-width: 768px) {
+    .nav-open {
+      transform: translateX(0);
+    }
+  
+    .nav-closed {
+      transform: translateX(-100%);
+    }
+  }
+  
+  /* Asegúrate de que el contenido principal no se vea oculto detrás del navbar */
+  .main-content {
+    margin-left: 16rem; /* Ajusta este valor según el ancho del navbar */
+  }
+  
+  @media (max-width: 768px) {
+    .main-content {
+      margin-left: 0;
+    }
+  }
+  
