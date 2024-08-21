@@ -1,0 +1,36 @@
+<div class="max-w-md mx-auto bg-white p-6 rounded-md shadow-md">
+    <h2 class="text-2xl font-semibold text-center mb-4">Crear Nueva Tarea</h2>
+    <form (ngSubmit)="onSubmit()" [formGroup]="taskForm">
+      <!-- Título -->
+      <div class="mb-4">
+        <label for="title" class="block text-gray-700 font-medium mb-2">Título</label>
+        <input type="text" id="title" formControlName="title" class="w-full p-2 border border-gray-300 rounded-md" placeholder="Título de la tarea">
+      </div>
+  
+      <!-- Descripción -->
+      <div class="mb-4">
+        <label for="description" class="block text-gray-700 font-medium mb-2">Descripción</label>
+        <textarea id="description" formControlName="description" class="w-full p-2 border border-gray-300 rounded-md" rows="4" placeholder="Descripción de la tarea"></textarea>
+      </div>
+  
+      <!-- Fecha -->
+      <div class="mb-4">
+        <label for="date" class="block text-gray-700 font-medium mb-2">Fecha</label>
+        <input type="date" id="date" formControlName="date" class="w-full p-2 border border-gray-300 rounded-md">
+      </div>
+  
+      <!-- Hora -->
+      <div class="mb-4">
+        <label for="time" class="block text-gray-700 font-medium mb-2">Hora</label>
+        <input type="time" id="time" formControlName="time" class="w-full p-2 border border-gray-300 rounded-md">
+      </div>
+  
+      <!-- Botón de Enviar -->
+      <div class="text-center">
+        <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600">
+          Añadir Tarea
+        </button>
+      </div>
+    </form>
+  </div>
+  
