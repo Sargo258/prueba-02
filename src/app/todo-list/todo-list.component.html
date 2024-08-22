@@ -1,0 +1,14 @@
+<div class="container mx-auto mt-8">
+    <h2 class="text-2xl font-semibold text-center mb-6">Mis Tareas</h2>
+    
+    <ul class="bg-white shadow-md rounded-lg overflow-hidden">
+      <li *ngFor="let task of tasks()" class="border-b border-gray-200 p-4">
+        <div class="flex items-center justify-between">
+          <span>{{ task.name }}</span>
+          <span class="text-gray-500 text-sm">{{ task.dueDate | date }}</span>
+        </div>
+        <p class="text-gray-600">{{ task.title }}</p>
+      </li>
+    </ul>
+  </div>
+  
