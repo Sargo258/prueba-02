@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { TaskService } from '../services/task.service';
 
 @Component({
   selector: 'app-task-form',
@@ -11,7 +12,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 export class TaskFormComponent {
   taskForm: FormGroup;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private taskService: TaskService) {
     this.taskForm = this.fb.group({
       title: ['', Validators.required],
       description: [''],
@@ -22,25 +23,16 @@ export class TaskFormComponent {
 
   onSubmit() {
     if (this.taskForm.valid) {
-      const newTask = this.taskForm.value;
-  
-      // Obtener las tareas almacenadas en el localStorage
-      const storedTasks = localStorage.getItem('tasks');
-  
-      // Parsear las tareas si existen, o inicializar un array vacío si no hay tareas almacenadas
-      const tasks = storedTasks ? JSON.parse(storedTasks) : [];
-  
-      // Añadir la nueva tarea al array de tareas
-      tasks.push(newTask);
-  
-      // Guardar el array de tareas actualizado en el localStorage
-      localStorage.setItem('tasks', JSON.stringify(tasks));
-  
+      const newTask = {
+        title: this.taskForm.value.title,
+        description: this.taskForm.value.description,
+        dueDate: new Date(`${this.taskForm.value.date}T${this.taskForm.value.time}`),
+      };
+      
+      this.taskService.saveTask(newTask);
+
       console.log('Tarea guardada:', newTask);
-  
-      // Resetear el formulario después de guardar la tarea
       this.taskForm.reset();
     }
   }
-  
 }
