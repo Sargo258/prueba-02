@@ -36,6 +36,16 @@ export class TaskService {
     });
   }
 
+
+  // Eliminar una tarea
+  deleteTask(task: any) {
+    this.tasks.update(tasks => {
+      const updatedTasks = tasks.filter(t => t !== task);
+      this.saveTasksToStorage(updatedTasks);
+      return updatedTasks;
+    });
+  }
+
   // Guardar las tareas en el localStorage
   private saveTasksToStorage(tasks: any[]) {
     localStorage.setItem(this.storageKey, JSON.stringify(tasks));

@@ -1,15 +1,34 @@
 <div class="container mx-auto mt-8 px-4">
-    <h2 class="text-2xl font-semibold text-center mb-6">Mis Tareas</h2>
-    
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-      <div *ngFor="let task of tasks()"
-           class="bg-white shadow-lg rounded-lg overflow-hidden p-4 hover:shadow-xl hover:scale-105 transition-transform duration-300 ease-in-out">
-        <div class="flex flex-col">
-          <span class="text-lg font-medium mb-2">{{ task.name }}</span>
-          <p class="text-gray-600 mb-2">{{ task.title }}</p>
-          <span class="text-gray-500 text-sm">{{ task.dueDate | date }}</span>
-        </div>
+  <h2 class="text-2xl font-semibold text-center mb-6">Mis Tareas</h2>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+    <div *ngFor="let task of tasks()"
+      class="relative bg-white shadow-lg rounded-lg overflow-hidden p-4 hover:shadow-xl hover:scale-105 transition-transform duration-300 ease-in-out">
+      
+      <!-- Botón para eliminar tarea como "X" en la esquina -->
+      <button (click)="deleteTask(task)"
+        class="absolute top-2 right-2 text-red-500 hover:text-red-700 text-2xl transition-colors duration-200">
+        &times;
+      </button>
+
+      <div class="flex flex-col">
+        <span class="text-lg font-medium mb-2">{{ task.name }}</span>
+        <p class="text-gray-600 mb-2">{{ task.title }}</p>
+        <span class="text-gray-500 text-sm">{{ task.dueDate | date }}</span>
+
+        <!-- Botón para ver más detalles -->
+        <button (click)="openModal(task)"
+          class="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700 transition-colors duration-200">
+          Ver detalles
+        </button>
       </div>
     </div>
   </div>
-  
+
+  <app-task-detail-modal 
+    *ngIf="selectedTask" 
+    [task]="selectedTask" 
+    (close)="closeModal()">
+  </app-task-detail-modal>
+
+</div>
