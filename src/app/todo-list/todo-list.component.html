@@ -5,30 +5,39 @@
     <div *ngFor="let task of tasks()"
       class="relative bg-white shadow-lg rounded-lg overflow-hidden p-4 hover:shadow-xl hover:scale-105 transition-transform duration-300 ease-in-out">
       
-      <!-- Botón para eliminar tarea como "X" en la esquina -->
-      <button (click)="deleteTask(task)"
+      <button (click)="deleteTask(task.id)"
         class="absolute top-2 right-2 text-red-500 hover:text-red-700 text-2xl transition-colors duration-200">
         &times;
       </button>
 
       <div class="flex flex-col">
-        <span class="text-lg font-medium mb-2">{{ task.name }}</span>
-        <p class="text-gray-600 mb-2">{{ task.title }}</p>
+        <span class="text-lg font-medium mb-2">{{ task.title }}</span>
+        <p class="text-gray-600 mb-2">{{ task.description }}</p>
         <span class="text-gray-500 text-sm">{{ task.dueDate | date }}</span>
 
-        <!-- Botón para ver más detalles -->
-        <button (click)="openModal(task)"
+        <button (click)="viewTaskDetails(task)"
           class="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700 transition-colors duration-200">
           Ver detalles
+        </button>
+
+        <button (click)="openEditModal(task)"
+          class="mt-2 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-700 transition-colors duration-200">
+          Editar
         </button>
       </div>
     </div>
   </div>
 
   <app-task-detail-modal 
-    *ngIf="selectedTask" 
+    *ngIf="selectedTask && !isEditModalOpen" 
     [task]="selectedTask" 
     (close)="closeModal()">
   </app-task-detail-modal>
 
+  <app-edit-modal 
+    *ngIf="isEditModalOpen" 
+    [task]="selectedTask" 
+    (close)="closeModal()" 
+    (taskUpdated)="onTaskUpdated($event)">
+  </app-edit-modal>
 </div>
