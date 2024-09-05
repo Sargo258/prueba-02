@@ -12,7 +12,6 @@
 
       <div class="flex flex-col">
         <span class="text-lg font-medium mb-2">{{ task.title }}</span>
-        <p class="text-gray-600 mb-2">{{ task.description }}</p>
         <span class="text-gray-500 text-sm">{{ task.dueDate | date }}</span>
 
         <button (click)="viewTaskDetails(task)"
@@ -20,7 +19,7 @@
           Ver detalles
         </button>
 
-        <button (click)="openEditModal(task)"
+        <button (click)="openTaskForm(task)"
           class="mt-2 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-700 transition-colors duration-200">
           Editar
         </button>
@@ -29,15 +28,25 @@
   </div>
 
   <app-task-detail-modal 
-    *ngIf="selectedTask && !isEditModalOpen" 
-    [task]="selectedTask" 
-    (close)="closeModal()">
+      *ngIf="selectedTask" 
+      [task]="selectedTask" 
+      (close)="closeModal()">
   </app-task-detail-modal>
 
-  <app-edit-modal 
-    *ngIf="isEditModalOpen" 
-    [task]="selectedTask" 
-    (close)="closeModal()" 
-    (taskUpdated)="onTaskUpdated($event)">
-  </app-edit-modal>
+  <!-- Aquí mostramos el modal si se selecciona una tarea para editar -->
+  <div *ngIf="isEditing" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
+    <div class="relative bg-white rounded-lg shadow-lg p-4 w-full max-w-sm max-h-96 overflow-y-auto">
+      <button (click)="closeModal()"
+        class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-2xl transition-colors duration-200">
+        &times;
+      </button>
+      
+      <!-- Llamamos al TaskFormComponent -->
+      <app-task-form 
+        [task]="selectedTask" 
+        (taskSaved)="onTaskSaved($event)"
+        (close)="closeModal()">
+      </app-task-form>
+    </div>
+  </div>
 </div>
