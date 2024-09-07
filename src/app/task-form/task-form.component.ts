@@ -1,19 +1,22 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TaskService } from '../services/task.service';
-import { ConfirmationModalComponent } from '../confirmation-modal/confirmation-modal.component';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { ConfirmationModalComponent } from '../confirmation-modal/confirmation-modal.component';
 
 @Component({
   selector: 'app-task-form',
   standalone: true,
-  imports: [ReactiveFormsModule, ConfirmationModalComponent, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, ConfirmationModalComponent],
   templateUrl: './task-form.component.html',
   styleUrl: './task-form.component.css'
 })
-export class TaskFormComponent {
+export class TaskFormComponent implements OnInit {
+  @Input() task: any = null; // Si la tarea es nula, el formulario será para crear una nueva tarea
+  @Output() close = new EventEmitter<void>();
   taskForm: FormGroup;
+  isEditMode: boolean = false; // Determina si estamos en modo edición o no
   showModal: boolean = false;
 
   constructor(private fb: FormBuilder, private taskService: TaskService, private router: Router) {
@@ -25,26 +28,50 @@ export class TaskFormComponent {
     });
   }
 
+  ngOnInit(): void {
+    // Si se pasa una tarea por Input, estamos en modo edición
+    if (this.task) {
+      this.isEditMode = true;
+      this.patchFormValues(this.task);
+    }
+  }
+
+  patchFormValues(task: any): void {
+    const [date, time] = task.dueDate.split('T');
+    this.taskForm.patchValue({
+      title: task.title,
+      description: task.description,
+      date: date,
+      time: time.slice(0, 5), // HH:mm
+    });
+  }
+
   onSubmit() {
     if (this.taskForm.valid) {
-      const newTask = {
+      const taskData = {
         title: this.taskForm.value.title,
         description: this.taskForm.value.description,
-        dueDate: new Date(`${this.taskForm.value.date}T${this.taskForm.value.time}`),
+        dueDate: `${this.taskForm.value.date}T${this.taskForm.value.time}:00`
       };
-      
-      this.taskService.saveTask(newTask);
 
-      console.log('Tarea guardada:', newTask);
-      this.taskForm.reset();
+      if (this.isEditMode) {
+        // Si es edición, actualizamos la tarea
+        const updatedTask = { ...this.task, ...taskData };
+        this.taskService.updateTask(updatedTask);
+      } else {
+        // Si no es edición, añadimos una nueva tarea
+        this.taskService.saveTask(taskData);
+      }
 
-      // Mostrar el modal de confirmación
       this.showModal = true;
     }
   }
 
   closeModal() {
+    this.close.emit();
     this.showModal = false;
     this.router.navigate(['/Todo-List']);
   }
 }
+
+
