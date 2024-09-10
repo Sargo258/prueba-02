@@ -1,41 +1,5 @@
 <div class="flex flex-col min-h-screen bg-gray-100">
-  <!-- Navbar horizontal -->
-  <nav class="bg-blue-800 text-white shadow-lg flex items-center justify-between p-4">
-    <!-- Botón de menú (hamburguesa) visible solo en pantallas pequeñas -->
-    <button (click)="toggleNavbar()" class="md:hidden text-white p-2 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400">
-      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
-      </svg>
-    </button>
-    <!-- Título -->
-    <h1 class="text-2xl font-semibold flex-grow text-center">Organize Todo</h1>
-    <!-- Menú de navegación horizontal visible en pantallas grandes -->
-    <ul class="hidden md:flex space-x-4">
-      <li class="py-2 px-4 hover:bg-blue-700">
-        <a href="Todo-List" class="block">Todos-List</a>
-      </li>
-      <li class="py-2 px-4 hover:bg-blue-700">
-        <a href="Add-Task" class="block">Add-Todos</a>
-      </li>
-    </ul>
-  </nav>
-
-  <!-- Menú lateral desplegable en pantallas pequeñas -->
-  <div [ngClass]="{'block': isNavbarOpen, 'hidden': !isNavbarOpen}" class="fixed top-0 left-0 w-28 bg-blue-800 text-white min-h-screen shadow-lg z-30 md:hidden transition-transform transform" [ngClass]="{'translate-x-0': isNavbarOpen, '-translate-x-full': !isNavbarOpen}">
-    <button (click)="toggleNavbar()" class="absolute top-4 right-4 text-white p-2 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400">
-      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
-      </svg>
-    </button>
-    <ul class="mt-16">
-      <li class="py-2 px-4 hover:bg-blue-700">
-        <a href="Todo-List" class="block">Todos-List</a>
-      </li>
-      <li class="py-2 px-4 hover:bg-blue-700">
-        <a href="Add-Task" class="block">Add-Todos</a>
-      </li>
-    </ul>
-  </div>
+ <app-header></app-header>
 
   <!-- Contenido dinámico -->
   <main class="flex-grow p-6 bg-gray-100">
