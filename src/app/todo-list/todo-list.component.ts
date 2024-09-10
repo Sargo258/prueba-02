@@ -13,30 +13,33 @@ import { TaskDetailModalComponent } from '../task-detail-modal/task-detail-modal
 })
 export class TodoListComponent implements OnInit {
   tasks = computed(() => this.taskService.getTasks());
-  selectedTask: any = null; // Tarea seleccionada para editar
+  selectedTask: any = null; // Tarea seleccionada para ver o editar
   isEditing: boolean = false; // Controla si el modal de edición está abierto
+  isViewing: boolean = false; // Controla si el modal de detalles está abierto
 
   constructor(private taskService: TaskService) {}
 
   ngOnInit(): void {}
 
-   // Muestra detalles de una tarea
-   viewTaskDetails(task: any) {
+  // Muestra detalles de una tarea
+  viewTaskDetails(task: any) {
     this.selectedTask = { ...task };
+    this.isViewing = true; // Mostrar modal de visualización de detalles
     this.isEditing = false; // Asegurarse de que no estamos en modo edición
   }
-
 
   // Abre el formulario para añadir o editar una tarea
   openTaskForm(task?: any) {
     this.selectedTask = task ? { ...task } : { title: '', description: '', dueDate: '' }; // Si no hay tarea, es para añadir una nueva
     this.isEditing = true; // Mostrar modal de edición
+    this.isViewing = false; // Asegurarse de que no estamos en modo de visualización de detalles
   }
 
   // Cierra el modal
   closeModal() {
     this.selectedTask = null;
-    this.isEditing = false; // Ocultar modal
+    this.isEditing = false; // Ocultar modal de edición
+    this.isViewing = false; // Ocultar modal de detalles
   }
 
   // Maneja la tarea guardada
