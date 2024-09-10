@@ -1,19 +1,16 @@
 import { Component } from '@angular/core';
 import { RouterModule, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { HeaderComponent } from "../shared/components/header/header.component";
 
 
 @Component({
   selector: 'app-layout',
   standalone: true,
-  imports: [RouterModule, CommonModule],
+  imports: [RouterModule, CommonModule, HeaderComponent],
   templateUrl: './layout.component.html',
   styleUrl: './layout.component.css'
 })
 export class LayoutComponent {
-  isNavbarOpen = false;
-
-  toggleNavbar() {
-    this.isNavbarOpen = !this.isNavbarOpen;
-  }
+ 
 }
