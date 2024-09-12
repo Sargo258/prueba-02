@@ -26,6 +26,7 @@ export class TaskFormComponent implements OnInit {
       description: [''],
       date: ['', Validators.required],
       time: ['', Validators.required],
+      class: ['', Validators.required]
     });
   }
 
@@ -52,7 +53,8 @@ export class TaskFormComponent implements OnInit {
       const taskData: Task = {
         title: this.taskForm.value.title,
         description: this.taskForm.value.description,
-        dueDate: `${this.taskForm.value.date}T${this.taskForm.value.time}:00`
+        dueDate: `${this.taskForm.value.date}T${this.taskForm.value.time}:00`,
+        class: this.taskForm.value.class,
       };
 
       if (this.isEditMode && this.task) {

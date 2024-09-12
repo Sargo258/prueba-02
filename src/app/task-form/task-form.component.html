@@ -24,6 +24,16 @@
         <label for="time" class="block text-gray-700 font-medium mb-2">Hora</label>
         <input type="time" id="time" formControlName="time" class="w-full p-2 border border-gray-300 rounded-md">
       </div>
+
+      <div class="mb-4">
+        <label for="class" class="block text-gray-700 font-medium mb-2">Tipo de Tarea</label>
+        <select id="class" formControlName="class" class="w-full p-2 border border-gray-300 rounded-md">
+          <option value="">Seleccionar tipo</option>
+          <option value="personal">Personal</option>
+          <option value="work">Trabajo</option>
+          <option value="urgent">Urgente</option>
+        </select>
+      </div>
   
       <!-- Botón de Enviar -->
       <div class="text-center">
