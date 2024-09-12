@@ -1,8 +1,16 @@
 <div class="container mx-auto mt-8 px-4">
-  <h2 class="text-2xl font-semibold text-center mb-6">Mis Tareas</h2>
+  <h2 class="text-2xl font-semibold text-center mb-6 leading-relaxed">Mis Tareas</h2>
 
-  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-    <div *ngFor="let task of tasks()"
+  <div class="flex flex-col gap-4"></div>
+    <input type="text" [(ngModel)]="searchTerm" 
+      placeholder="Buscar tareas..." 
+      class="w-full p-2 border border-gray-300 rounded-lg"
+    />
+    <br><br>
+  </div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 overflow-y-auto max-h-96">
+    <div *ngFor="let task of filterTasks()"
       class="relative bg-white shadow-lg rounded-lg overflow-hidden p-4 hover:shadow-xl hover:scale-105 transition-transform duration-300 ease-in-out">
       
       <button (click)="deleteTask(task.id)"
@@ -50,4 +58,4 @@
       </app-task-form>
     </div>
   </div>
-</div>
+

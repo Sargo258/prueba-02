@@ -2,24 +2,34 @@ import { Component, OnInit, computed } from '@angular/core';
 import { TaskService } from '../services/task.service';
 import { CommonModule } from '@angular/common';
 import { TaskFormComponent } from '../task-form/task-form.component';
-import { TaskDetailModalComponent } from '../task-detail-modal/task-detail-modal.component';
+import { TaskDetailModalComponent } from '../shared/components/task-detail-modal/task-detail-modal.component';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-todo-list',
   standalone: true,
-  imports: [CommonModule, TaskFormComponent, TaskDetailModalComponent],
+  imports: [CommonModule, TaskFormComponent, TaskDetailModalComponent, FormsModule],
   templateUrl: './todo-list.component.html',
   styleUrls: ['./todo-list.component.css']
 })
 export class TodoListComponent implements OnInit {
   tasks = computed(() => this.taskService.getTasks());
+  filteredTasks = computed(() => this.filterTasks());
   selectedTask: any = null; // Tarea seleccionada para ver o editar
   isEditing: boolean = false; // Controla si el modal de edición está abierto
   isViewing: boolean = false; // Controla si el modal de detalles está abierto
+  searchTerm: string = '';
 
   constructor(private taskService: TaskService) {}
 
   ngOnInit(): void {}
+
+  filterTasks() {
+    const term = this.searchTerm.toLowerCase();
+    return this.tasks().filter(task =>
+      task.title.toLowerCase().includes(term) || task.description.toLowerCase().includes(term)
+    );
+  }
 
   // Muestra detalles de una tarea
   viewTaskDetails(task: any) {

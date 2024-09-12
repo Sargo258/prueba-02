@@ -3,7 +3,8 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { TaskService } from '../services/task.service';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { ConfirmationModalComponent } from '../confirmation-modal/confirmation-modal.component';
+import { ConfirmationModalComponent } from '../shared/components/confirmation-modal/confirmation-modal.component';
+
 
 @Component({
   selector: 'app-task-form',
