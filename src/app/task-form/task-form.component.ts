@@ -4,7 +4,7 @@ import { TaskService } from '../services/task.service';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ConfirmationModalComponent } from '../shared/components/confirmation-modal/confirmation-modal.component';
-
+import { Task } from '../models/task.model';
 
 @Component({
   selector: 'app-task-form',
@@ -14,7 +14,7 @@ import { ConfirmationModalComponent } from '../shared/components/confirmation-mo
   styleUrl: './task-form.component.css'
 })
 export class TaskFormComponent implements OnInit {
-  @Input() task: any = null; // Si la tarea es nula, el formulario será para crear una nueva tarea
+  @Input() task: Task | null = null; // Si la tarea es nula, el formulario será para crear una nueva tarea
   @Output() close = new EventEmitter<void>();
   taskForm: FormGroup;
   isEditMode: boolean = false; // Determina si estamos en modo edición o no
@@ -37,7 +37,7 @@ export class TaskFormComponent implements OnInit {
     }
   }
 
-  patchFormValues(task: any): void {
+  patchFormValues(task: Task): void {
     const [date, time] = task.dueDate.split('T');
     this.taskForm.patchValue({
       title: task.title,
@@ -49,13 +49,13 @@ export class TaskFormComponent implements OnInit {
 
   onSubmit() {
     if (this.taskForm.valid) {
-      const taskData = {
+      const taskData: Task = {
         title: this.taskForm.value.title,
         description: this.taskForm.value.description,
         dueDate: `${this.taskForm.value.date}T${this.taskForm.value.time}:00`
       };
 
-      if (this.isEditMode) {
+      if (this.isEditMode && this.task) {
         // Si es edición, actualizamos la tarea
         const updatedTask = { ...this.task, ...taskData };
         this.taskService.updateTask(updatedTask);
