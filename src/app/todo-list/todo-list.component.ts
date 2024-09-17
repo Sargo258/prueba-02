@@ -19,6 +19,7 @@ export class TodoListComponent implements OnInit {
   isEditing: boolean = false; // Controla si el modal de edición está abierto
   isViewing: boolean = false; // Controla si el modal de detalles está abierto
   searchTerm: string = '';
+  selectedClass: string = ''; // Almacena la clase seleccionada para el filtro
 
   constructor(private taskService: TaskService) {}
 
@@ -26,9 +27,13 @@ export class TodoListComponent implements OnInit {
 
   filterTasks() {
     const term = this.searchTerm.toLowerCase();
-    return this.tasks().filter(task =>
-      task.title.toLowerCase().includes(term) || task.description.toLowerCase().includes(term)
-    );
+    const selectedClass = this.selectedClass;
+
+    return this.tasks().filter(task => {
+      const matchesSearch = task.title.toLowerCase().includes(term) || task.description.toLowerCase().includes(term);
+      const matchesClass = !selectedClass || task.class === selectedClass; // Si no hay clase seleccionada, no filtramos por clase
+      return matchesSearch && matchesClass;
+    });
   }
 
   // Muestra detalles de una tarea
@@ -40,16 +45,16 @@ export class TodoListComponent implements OnInit {
 
   // Abre el formulario para añadir o editar una tarea
   openTaskForm(task?: any) {
-    this.selectedTask = task ? { ...task } : { title: '', description: '', dueDate: '' }; // Si no hay tarea, es para añadir una nueva
+    this.selectedTask = task ? { ...task } : { title: '', description: '', dueDate: '', class: '' }; // Si no hay tarea, es para añadir una nueva
     this.isEditing = true; // Mostrar modal de edición
-    this.isViewing = false; // Asegurarse de que no estamos en modo de visualización de detalles
+    this.isViewing = false;
   }
 
   // Cierra el modal
   closeModal() {
     this.selectedTask = null;
-    this.isEditing = false; // Ocultar modal de edición
-    this.isViewing = false; // Ocultar modal de detalles
+    this.isEditing = false;
+    this.isViewing = false;
   }
 
   // Maneja la tarea guardada

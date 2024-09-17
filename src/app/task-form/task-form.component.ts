@@ -4,7 +4,7 @@ import { TaskService } from '../services/task.service';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ConfirmationModalComponent } from '../shared/components/confirmation-modal/confirmation-modal.component';
-import { Task } from '../models/task.model';
+import { Task } from '../shared/components/models/task.model';
 
 @Component({
   selector: 'app-task-form',
