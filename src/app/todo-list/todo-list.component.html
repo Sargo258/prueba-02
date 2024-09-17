@@ -6,6 +6,15 @@
       placeholder="Buscar tareas..." 
       class="w-full p-2 border border-gray-300 rounded-lg"
     />
+    
+    <select [(ngModel)]="selectedClass" class="w-full p-2 border border-gray-300 rounded-lg">
+      <option value="">Todas las clases</option>
+      <option value="personal">Personal</option>
+      <option value="trabajo">Trabajo</option>
+      <option value="estudio">Estudio</option>
+      <option value="trabajo">Urgente </option> 
+    </select>
+
     <br><br>
   </div>
 
