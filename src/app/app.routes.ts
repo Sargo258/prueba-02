@@ -3,6 +3,7 @@ import { LayoutComponent } from './layout/layout.component';
 import { TaskFormComponent } from './task-form/task-form.component';
 import { TodoListComponent } from './todo-list/todo-list.component';
 import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';
 
 export const routes: Routes = [
     {
@@ -13,6 +14,10 @@ export const routes: Routes = [
     {
         path: 'login',
         component: LoginComponent
+    },
+    {
+        path: 'register',
+        component: RegisterComponent
     },
     {
         path: '',
