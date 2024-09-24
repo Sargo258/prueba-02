@@ -14,6 +14,7 @@ export class TaskDetailModalComponent {
   @Output() close = new EventEmitter<void>(); // Emite un evento para cerrar el modal
 
   closeModal() {
+    console.log('Task received:', this.task);
     this.close.emit(); // Emite el evento para cerrar el modal
   }
 
