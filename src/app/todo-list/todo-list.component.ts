@@ -1,9 +1,11 @@
-import { Component, OnInit, computed } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { TaskService } from '../services/task.service';
 import { CommonModule } from '@angular/common';
 import { TaskFormComponent } from '../task-form/task-form.component';
 import { TaskDetailModalComponent } from '../shared/components/task-detail-modal/task-detail-modal.component';
 import { FormsModule } from '@angular/forms';
+import { Task } from '../shared/components/models/task.model'; // Asegúrate de que la ruta sea correcta
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-todo-list',
@@ -13,63 +15,81 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./todo-list.component.css']
 })
 export class TodoListComponent implements OnInit {
-  tasks = computed(() => this.taskService.getTasks());
-  filteredTasks = computed(() => this.filterTasks());
-  selectedTask: any = null; // Tarea seleccionada para ver o editar
+  tasks: Task[] = []; // Almacena la lista de tareas
+  filteredTasks: Task[] = []; // Almacena las tareas filtradas
+  selectedTask: Task | null = null; // Tarea seleccionada para ver o editar
   isEditing: boolean = false; // Controla si el modal de edición está abierto
   isViewing: boolean = false; // Controla si el modal de detalles está abierto
   searchTerm: string = '';
-  selectedClass: string = ''; // Almacena la clase seleccionada para el filtro
+  selectedClass: string = '';
+  private taskSubscription: Subscription = new Subscription();
 
   constructor(private taskService: TaskService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.loadTasks(); // Carga las tareas al iniciar
+  }
+
+  loadTasks() {
+    this.taskSubscription = this.taskService.getTasks().subscribe(
+      (tasks: Task[]) => {
+        this.tasks = tasks; // Asigna las tareas obtenidas
+        this.filteredTasks = this.filterTasks(); // Actualiza las tareas filtradas
+      },
+      (error) => {
+        console.error('Error al cargar tareas', error);
+      }
+    );
+  }
 
   filterTasks() {
     const term = this.searchTerm.toLowerCase();
     const selectedClass = this.selectedClass;
 
-    return this.tasks().filter(task => {
-      const matchesSearch = task.title.toLowerCase().includes(term) || task.description.toLowerCase().includes(term);
-      const matchesClass = !selectedClass || task.class === selectedClass; // Si no hay clase seleccionada, no filtramos por clase
+    return this.tasks.filter(task => {
+      const matchesSearch = task.title.toLowerCase().includes(term) || task.description?.toLowerCase().includes(term);
+      const matchesClass = !selectedClass || task.class === selectedClass; 
       return matchesSearch && matchesClass;
     });
   }
 
-  // Muestra detalles de una tarea
-  viewTaskDetails(task: any) {
+  viewTaskDetails(task: Task) {
     this.selectedTask = { ...task };
-    this.isViewing = true; // Mostrar modal de visualización de detalles
-    this.isEditing = false; // Asegurarse de que no estamos en modo edición
+    this.isViewing = true;
+    this.isEditing = false;
   }
 
-  // Abre el formulario para añadir o editar una tarea
-  openTaskForm(task?: any) {
-    this.selectedTask = task ? { ...task } : { title: '', description: '', dueDate: '', class: '' }; // Si no hay tarea, es para añadir una nueva
-    this.isEditing = true; // Mostrar modal de edición
+  openTaskForm(task?: Task) {
+    this.selectedTask = task ? { ...task } : { title: '', description: '', dueDate: '', class: '' } as Task; // Ajustar al tipo Task
+    this.isEditing = true;
     this.isViewing = false;
   }
 
-  // Cierra el modal
   closeModal() {
     this.selectedTask = null;
     this.isEditing = false;
     this.isViewing = false;
   }
 
-  // Maneja la tarea guardada
-  onTaskSaved(task: any) {
+  onTaskSaved(task: Task) {
     if (this.selectedTask && this.selectedTask.id) {
-      // Si existe una tarea seleccionada con ID, estamos editando
       this.taskService.updateTask(task);
     } else {
-      // Si no hay tarea seleccionada con ID, estamos añadiendo una nueva
       this.taskService.saveTask(task);
     }
-    this.closeModal(); // Cerrar modal después de guardar
+    this.loadTasks(); // Recarga las tareas después de guardar
+    this.closeModal(); // Cierra el modal después de guardar
   }
 
-  deleteTask(taskId: string) {
-    this.taskService.deleteTask(taskId);
+  deleteTask(id?: number) {
+    if (id !== undefined) {
+      // Lógica para eliminar la tarea
+      this.taskService.deleteTask(id).subscribe(() => {
+        this.loadTasks(); // O actualiza la lista de tareas de alguna otra manera
+      });
+    } else {
+      console.warn("El ID de la tarea es indefinido. No se puede eliminar.");
+    }
   }
+  
 }
